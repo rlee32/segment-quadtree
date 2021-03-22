@@ -14,11 +14,14 @@ public:
     bool intersects(const Segment &other) const;
 
     auto length() const { return length_; }
-private:
+
     Point a_;
     Point b_;
+
+    // x and y change from a to b.
     double dx_{0};
     double dy_{0};
+
     double length_{0};
 
     // Performs a 2D cross product with the provided point (w.r.t. to a_) and b_ (w.r.t. to a_).

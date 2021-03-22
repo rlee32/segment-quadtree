@@ -9,7 +9,8 @@ SRCS = example.cc \
     segment_quadtree/point.cc \
     segment_quadtree/segment.cc \
     segment_quadtree/box.cc \
-    segment_quadtree/segment_node.cc
+    segment_quadtree/segment_node.cc \
+    segment_quadtree/segment_quadtree.cc
 
 %.o: %.cc; $(CXX) $(CXX_FLAGS) -o $@ -c $<
 
