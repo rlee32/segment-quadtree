@@ -7,7 +7,9 @@ CXX_FLAGS += -I./ # include paths.
 
 SRCS = example.cc \
     segment_quadtree/point.cc \
-    segment_quadtree/segment.cc
+    segment_quadtree/segment.cc \
+    segment_quadtree/box.cc \
+    segment_quadtree/segment_node.cc
 
 %.o: %.cc; $(CXX) $(CXX_FLAGS) -o $@ -c $<
 
