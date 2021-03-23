@@ -12,7 +12,8 @@ namespace segment_quadtree {
 
 class SegmentNode {
 public:
-    SegmentNode(const Box &box);
+    // Box is the area the segment node covers. depth is 0 for the root.
+    SegmentNode(const Box &box, int depth = 0);
 
     // Inserts the segment identified by segment_id into this node, and creates children as necessary.
     // It is assumed that the segment touches this node.
@@ -34,6 +35,9 @@ private:
 
     // Box representing physical coverage of this node.
     const Box box_;
+
+    // Depth in the quadtree.
+    int depth_{0};
 
     // Splits a leaf node into quadrants recursively until split threshold is satisfied or max depth is reached.
     void split(const std::vector<Segment> &all_segments);

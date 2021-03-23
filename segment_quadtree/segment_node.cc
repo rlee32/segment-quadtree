@@ -4,13 +4,14 @@
 
 namespace segment_quadtree {
 
-SegmentNode::SegmentNode(const Box &box)
-    : box_(box) {
+SegmentNode::SegmentNode(const Box &box, int depth)
+    : box_(box)
+    , depth_(depth) {
 }
 
 void SegmentNode::create_child(const std::vector<Segment> &all_segments, int quadrant, const Box &box, const std::vector<int> &segments) {
     assert(not children_[quadrant]);
-    children_[quadrant] = std::make_unique<SegmentNode>(box);
+    children_[quadrant] = std::make_unique<SegmentNode>(box, depth_ + 1);
     children_[quadrant]->segments_ = segments;
     if (segments.size() > constants::SPLIT_THRESHOLD) {
         children_[quadrant]->split(all_segments);
@@ -19,6 +20,9 @@ void SegmentNode::create_child(const std::vector<Segment> &all_segments, int qua
 
 void SegmentNode::split(const std::vector<Segment> &all_segments) {
     assert(is_leaf());
+    if (depth_ + 1 >= constants::MAX_DEPTH) {
+        return;
+    }
     for (int quadrant{0}; quadrant < 4; ++quadrant) {
         auto b = make_box(quadrant);
         std::vector<int> segments;
@@ -38,6 +42,14 @@ void SegmentNode::split(const std::vector<Segment> &all_segments) {
 void SegmentNode::insert(const std::vector<Segment> &all_segments, int segment_id) {
     const auto &s = all_segments[segment_id];
     assert(s.intersects(box_));
+
+    // max depth, insert into this node and return.
+    if (depth_ + 1 >= constants::MAX_DEPTH) {
+        segments_.push_back(segment_id);
+        assert(is_leaf());
+        return;
+    }
+
     if (is_leaf()) {
         segments_.push_back(segment_id);
         if (segments_.size() > constants::SPLIT_THRESHOLD) {
