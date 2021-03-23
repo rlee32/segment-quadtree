@@ -92,4 +92,8 @@ Box SegmentNode::make_box(int quadrant) const {
     }
 }
 
+void SegmentNode::validate() const {
+    // TODO
+}
+
 } // namespace segment_quadtree

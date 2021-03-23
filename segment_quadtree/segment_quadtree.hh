@@ -11,6 +11,8 @@ class SegmentQuadtree {
 public:
     SegmentQuadtree(const std::vector<Segment> &segments);
 
+    void validate() const { root_.validate(); }
+
 private:
     const std::vector<Segment> &segments_;
     SegmentNode root_;
