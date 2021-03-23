@@ -1,6 +1,7 @@
 #pragma once
 
 #include "point.hh"
+#include "box.hh"
 
 namespace segment_quadtree {
 
@@ -12,6 +13,10 @@ public:
     // Returns true if this segment intersects with another segment.
     // If the segment is co-linear and overlapping, also returns true.
     bool intersects(const Segment &other) const;
+
+    // Returns true if this segment intersects with the provided box, or
+    // if the segment is inside the box.
+    bool intersects(const Box &box) const;
 
     auto length() const { return length_; }
 

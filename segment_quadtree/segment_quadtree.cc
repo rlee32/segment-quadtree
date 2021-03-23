@@ -27,7 +27,10 @@ Box get_box(const std::vector<Segment> &segments) {
 
 SegmentQuadtree::SegmentQuadtree(const std::vector<Segment> &segments)
     : segments_(segments)
-    , root_(get_box(segments_)) {
+    , root_(get_box(segments)) {
+    for (size_t i{0}; i < segments_.size(); ++i) {
+        root_.insert(segments_, i);
+    }
 }
 
 } // namespace segment_quadtree

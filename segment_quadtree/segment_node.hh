@@ -1,5 +1,6 @@
 #pragma once
 
+#include "segment.hh"
 #include "box.hh"
 
 #include <algorithm>
@@ -12,6 +13,13 @@ namespace segment_quadtree {
 class SegmentNode {
 public:
     SegmentNode(const Box &box);
+
+    // Inserts the segment identified by segment_id into this node, and creates children as necessary.
+    // It is assumed that the segment touches this node.
+    void insert(const std::vector<Segment> &all_segments, int segment_id);
+
+    // Returns true if this node is a leaf node.
+    bool is_leaf() const;
 
 private:
     // Children are ordered ccw by quadrant:
@@ -26,6 +34,15 @@ private:
 
     // Box representing physical coverage of this node.
     const Box box_;
+
+    // Splits a leaf node into quadrants recursively until split threshold is satisfied or max depth is reached.
+    void split(const std::vector<Segment> &all_segments);
+
+    // Creates a child quadrant.
+    void create_child(const std::vector<Segment> &all_segments, int quadrant, const Box &box, const std::vector<int> &segments);
+
+    // Creates a box corresponding to quadrant.
+    Box make_box(int quadrant) const;
 };
 
 } // namespace segment_quadtree

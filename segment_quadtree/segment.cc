@@ -54,6 +54,16 @@ bool Segment::intersects(const Segment &other) const {
     return not same_sign(cross_a, cross_b);
 }
 
+bool Segment::intersects(const Box &box) const {
+    if (box.touches(a_) or box.touches(b_)) {
+        return true;
+    }
+    return intersects(Segment(Point{box.xmin_, box.ymin_}, Point{box.xmin_, box.ymax_}))
+        or intersects(Segment(Point{box.xmin_, box.ymin_}, Point{box.xmax_, box.ymin_}))
+        or intersects(Segment(Point{box.xmax_, box.ymin_}, Point{box.xmax_, box.ymax_}))
+        or intersects(Segment(Point{box.xmin_, box.ymax_}, Point{box.xmax_, box.ymax_}));
+}
+
 double Segment::cross(const Point &point) const {
     auto dx = point.x_ - a_.x_;
     auto dy = point.y_ - a_.y_;

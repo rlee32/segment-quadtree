@@ -9,6 +9,7 @@
 namespace segment_quadtree {
 
 struct Box {
+    Box() = default;
     // Constructs a box from any 2 diagonally-opposite corners.
     Box(const Point &a, const Point &b);
 
@@ -26,6 +27,8 @@ struct Box {
     void include(const Point &point);
     // this is enlarged to contain box.
     void include(const Box &box);
+
+    Point center() const;
 };
 
 inline auto& operator<<(std::ostream& o, const Box& b) {

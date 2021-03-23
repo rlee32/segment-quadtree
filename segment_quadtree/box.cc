@@ -46,4 +46,9 @@ void Box::include(const Box &box) {
     include(box.xmax_, box.ymax_);
 }
 
+Point Box::center() const {
+    return Point{(xmin_ + xmax_) / 2, (ymin_ + ymax_) / 2};
+}
+
+
 } // namespace segment_quadtree
