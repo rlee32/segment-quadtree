@@ -10,8 +10,7 @@
 
 namespace segment_quadtree {
 
-class SegmentNode {
-public:
+struct SegmentNode {
     // Box is the area the segment node covers. depth is 0 for the root.
     SegmentNode(const Box &box, int depth = 0);
 
@@ -25,7 +24,6 @@ public:
     // Runs various checks, throwing if any fail.
     void validate() const;
 
-private:
     // Children are ordered ccw by quadrant:
     // 0: +x, +y
     // 1: -x, +y
