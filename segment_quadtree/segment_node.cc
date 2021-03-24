@@ -59,8 +59,11 @@ void SegmentNode::insert(const std::vector<Segment> &all_segments, int segment_i
     } else {
         assert(segments_.empty());
         for (int quadrant{0}; quadrant < 4; ++quadrant) {
-            if (children_[quadrant]) {
-                children_[quadrant]->insert(all_segments, segment_id);
+            auto &child = children_[quadrant];
+            if (child) {
+                if (s.intersects(child->box_)) {
+                    child->insert(all_segments, segment_id);
+                }
             } else {
                 auto box = make_box(quadrant);
                 create_child(all_segments, quadrant, box, {segment_id});
