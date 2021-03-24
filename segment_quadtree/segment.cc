@@ -26,6 +26,15 @@ Segment::Segment(const Point &a, const Point &b)
     , dx_(b.x_ - a.x_)
     , dy_(b.y_ - a.y_)
     , length_(std::sqrt(dx_ * dx_ + dy_ * dy_)) {
+    dx_ /= length_;
+    dy_ /= length_;
+}
+
+bool Segment::connects(const Segment &other) const {
+    return a_.is_coincident(other.a_)
+        or a_.is_coincident(other.b_)
+        or b_.is_coincident(other.a_)
+        or b_.is_coincident(other.b_);
 }
 
 bool Segment::intersects(const Segment &other) const {
@@ -67,8 +76,10 @@ bool Segment::intersects(const Box &box) const {
 double Segment::cross(const Point &point) const {
     auto dx = point.x_ - a_.x_;
     auto dy = point.y_ - a_.y_;
+    auto d = std::sqrt(dx * dx + dy * dy);
+    dx /= d;
+    dy /= d;
     return dx * dy_ - dy * dx_;
 }
-
 
 } // namespace segment_quadtree

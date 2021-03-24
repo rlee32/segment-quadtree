@@ -12,6 +12,7 @@ public:
 
     // Returns true if this segment intersects with another segment.
     // If the segment is co-linear and overlapping, also returns true.
+    // If the segment shares an endpoint but is not co-linear, it is also considered to be intersecting.
     bool intersects(const Segment &other) const;
 
     // Returns true if this segment intersects with the provided box, or
@@ -23,7 +24,7 @@ public:
     Point a_;
     Point b_;
 
-    // x and y change from a to b.
+    // x and y direction components (unit vector) from a to b.
     double dx_{0};
     double dy_{0};
 
@@ -31,6 +32,9 @@ public:
 
     // Performs a 2D cross product with the provided point (w.r.t. to a_) and b_ (w.r.t. to a_).
     double cross(const Point &point) const;
+
+    // Returns true if this segment and other shares an endpoint.
+    bool connects(const Segment &other) const;
 };
 
 } // namespace segment_quadtree
