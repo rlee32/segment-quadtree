@@ -1,4 +1,5 @@
 #include "segment_quadtree.hh"
+#include "constants.hh"
 
 #include <algorithm>
 
@@ -30,6 +31,47 @@ SegmentQuadtree::SegmentQuadtree(const std::vector<Segment> &segments)
     , root_(get_box(segments)) {
     for (size_t i{0}; i < segments_.size(); ++i) {
         root_.insert(segments_, i);
+    }
+}
+
+void SegmentQuadtree::validate() {
+    max_residency_ = 0;
+    avg_residency_ = 0;
+    max_depth_ = 0;
+    leaves_ = 0;
+    seen_segment_ids_.clear();
+    node_count_ = 0;
+    validate(root_);
+    assert(seen_segment_ids_.size() == segments_.size());
+    std::cout << "node count: " << node_count_ << std::endl;
+    std::cout << "node count ratio: " << double(node_count_) / segments_.size() << std::endl;
+    std::cout << "max depth: " << max_depth_ << std::endl;
+    std::cout << "average residency: " << avg_residency_ / double(leaves_) << std::endl;
+    std::cout << "max residency: " << max_residency_ << std::endl;
+    seen_segment_ids_.clear();
+}
+
+void SegmentQuadtree::validate(const SegmentNode &node) {
+    ++node_count_;
+    if (node.is_leaf()) {
+        assert(not node.segments_.empty());
+        for (auto id : node.segments_) {
+            seen_segment_ids_.insert(id);
+        }
+        ++leaves_;
+        avg_residency_ += int(node.segments_.size());
+        max_residency_ = std::max(max_residency_, int(node.segments_.size()));
+        max_depth_ = std::max(max_depth_, node.depth_);
+        if (node.depth_ + 1 < constants::MAX_DEPTH) {
+            assert(node.segments_.size() <= constants::SPLIT_THRESHOLD);
+        }
+    } else {
+        assert(node.segments_.empty());
+    }
+    for (const auto &child : node.children_) {
+        if (child) {
+            validate(*child);
+        }
     }
 }
 

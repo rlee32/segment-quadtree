@@ -7,7 +7,7 @@ namespace constants {
 constexpr int SPLIT_THRESHOLD{2};
 
 // No quadtree nodes will be created beyond this depth.
-constexpr int MAX_DEPTH{10};
+constexpr int MAX_DEPTH{9};
 
 } // namespace constants
 } // namespace segment_quadtree
