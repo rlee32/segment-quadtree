@@ -37,30 +37,54 @@ bool Segment::connects(const Segment &other) const {
         or b_.is_coincident(other.b_);
 }
 
-bool Segment::intersects(const Segment &other) const {
-    // First check cross w.r.t. this segment.
-    auto cross_a = cross(other.a_);
-    if (is_zero(cross_a)) {
-        return true;
-    }
-    auto cross_b = cross(other.b_);
-    if (is_zero(cross_b)) {
-        return true;
-    }
-    if (same_sign(cross_a, cross_b)) {
+bool Segment::touches(const Segment &other) const {
+    // First check if bounding boxes touch.
+    if (not Box(a_, b_).touches(Box(other.a_, other.b_))) {
         return false;
     }
 
-    // Now check cross w.r.t. other segment.
-    cross_a = other.cross(a_);
-    if (is_zero(cross_a)) {
-        return true;
+    // Check cross w.r.t. this segment.
+    auto cross_a = cross(other.a_);
+    auto cross_b = cross(other.b_);
+    auto any_zero = is_zero(cross_a) or is_zero(cross_b);
+    if (same_sign(cross_a, cross_b) and not any_zero) {
+        return false;
     }
-    cross_b = other.cross(b_);
-    if (is_zero(cross_b)) {
-        return true;
+
+    // Check cross w.r.t. other segment.
+    auto cross_a_other = other.cross(a_);
+    auto cross_b_other = other.cross(b_);
+    auto any_zero_other = is_zero(cross_a_other) or is_zero(cross_b_other);
+    if (same_sign(cross_a_other, cross_b_other) and not any_zero_other) {
+        return false;
     }
-    return not same_sign(cross_a, cross_b);
+
+    return any_zero or any_zero_other;
+}
+
+bool Segment::intersects(const Segment &other) const {
+    // First check if bounding boxes touch.
+    if (not Box(a_, b_).touches(Box(other.a_, other.b_))) {
+        return false;
+    }
+
+    // Check cross w.r.t. this segment.
+    auto cross_a = cross(other.a_);
+    auto cross_b = cross(other.b_);
+    auto any_zero = is_zero(cross_a) or is_zero(cross_b);
+    if (same_sign(cross_a, cross_b) and not any_zero) {
+        return false;
+    }
+
+    // Check cross w.r.t. other segment.
+    auto cross_a_other = other.cross(a_);
+    auto cross_b_other = other.cross(b_);
+    auto any_zero_other = is_zero(cross_a_other) or is_zero(cross_b_other);
+    if (same_sign(cross_a_other, cross_b_other) and not any_zero_other) {
+        return false;
+    }
+
+    return true;
 }
 
 bool Segment::intersects(const Box &box) const {

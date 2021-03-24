@@ -21,9 +21,6 @@ struct SegmentNode {
     // Returns true if this node is a leaf node.
     bool is_leaf() const;
 
-    // Runs various checks, throwing if any fail.
-    void validate() const;
-
     // Children are ordered ccw by quadrant:
     // 0: +x, +y
     // 1: -x, +y

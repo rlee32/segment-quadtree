@@ -3,6 +3,8 @@
 #include "point.hh"
 #include "box.hh"
 
+#include <iostream>
+
 namespace segment_quadtree {
 
 struct Segment {
@@ -14,6 +16,10 @@ public:
     // If the segment is co-linear and overlapping, also returns true.
     // If the segment shares an endpoint but is not co-linear, it is also considered to be intersecting.
     bool intersects(const Segment &other) const;
+
+    // Returns true if this segment 'touches' another segment.
+    // This is a special case of intersection, where the endpoint of one segment lies along the other segment.
+    bool touches(const Segment &other) const;
 
     // Returns true if this segment intersects with the provided box, or
     // if the segment is inside the box.
@@ -36,6 +42,12 @@ public:
     // Returns true if this segment and other shares an endpoint.
     bool connects(const Segment &other) const;
 };
+
+inline auto &operator<<(std::ostream &o, const Segment &s) {
+    o << "(" << s.a_.x_ << ", " << s.a_.y_ << ") "
+        << "(" << s.b_.x_ << ", " << s.b_.y_ << ")" << std::endl;
+    return o;
+}
 
 } // namespace segment_quadtree
 

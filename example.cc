@@ -48,15 +48,21 @@ int main(int argc, const char** argv)
     std::cout << "\nquadtree stats:\n";
     const auto &segments = make_segments(x, y, initial_tour);
     auto quadtree = segment_quadtree::SegmentQuadtree(segments);
-    quadtree.validate();
-    /*
-    const auto root {point_quadtree::make_quadtree(x, y, domain)};
-    std::cout << "node ratio: "
-        << static_cast<double>(point_quadtree::count_nodes(root))
-            / point_quadtree::count_points(root)
-        << std::endl;
-    */
     std::cout << "Finished quadtree in " << timer.stop() / 1e9 << " seconds.\n\n";
+
+    quadtree.validate();
+
+    int intersections{0};
+    int i{0};
+    for (const auto& segment : segments) {
+        // segment in the set should not 'intersect'.
+        if (quadtree.intersects(segment)) {
+            ++intersections;
+        }
+        std::cout << i << std::endl;
+        ++i;
+    }
+    std::cout << "Found " << intersections << " segments that intersect with others of " << segments.size() << " total." << std::endl;
 
     return EXIT_SUCCESS;
 }

@@ -75,4 +75,29 @@ void SegmentQuadtree::validate(const SegmentNode &node) {
     }
 }
 
+bool SegmentQuadtree::intersects(const Segment &segment) const {
+    return intersects(segment, root_);
+}
+
+bool SegmentQuadtree::intersects(const Segment &segment, const SegmentNode &current_node) const {
+    if (current_node.is_leaf()) {
+        for (const auto &i : current_node.segments_) {
+            if (segment.intersects(segments_[i])) {
+                if (not segment.connects(segments_[i])) { // TODO: look into the case where segments are co-linear.
+                    return true;
+                }
+            }
+        }
+    } else {
+        for (const auto &child : current_node.children_) {
+            if (child) {
+                if (intersects(segment, *child)) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 } // namespace segment_quadtree

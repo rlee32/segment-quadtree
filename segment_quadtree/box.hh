@@ -31,7 +31,7 @@ struct Box {
     Point center() const;
 };
 
-inline auto& operator<<(std::ostream& o, const Box& b) {
+inline auto &operator<<(std::ostream &o, const Box &b) {
     o << "(" << b.xmin_ << ", " << b.ymin_ << ") "
         << "(" << b.xmax_ << ", " << b.ymax_ << ")" << std::endl;
     return o;
