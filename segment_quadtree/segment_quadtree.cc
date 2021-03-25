@@ -91,8 +91,10 @@ bool SegmentQuadtree::intersects(const Segment &segment, const SegmentNode &curr
     } else {
         for (const auto &child : current_node.children_) {
             if (child) {
-                if (intersects(segment, *child)) {
-                    return true;
+                if (segment.intersects(child->box_)) {
+                    if (intersects(segment, *child)) {
+                        return true;
+                    }
                 }
             }
         }
