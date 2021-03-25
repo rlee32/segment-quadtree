@@ -25,7 +25,8 @@ Segment::Segment(const Point &a, const Point &b)
     , b_(b)
     , dx_(b.x_ - a.x_)
     , dy_(b.y_ - a.y_)
-    , length_(std::sqrt(dx_ * dx_ + dy_ * dy_)) {
+    , length_(std::sqrt(dx_ * dx_ + dy_ * dy_))
+    , box_(a_, b_) {
     dx_ /= length_;
     dy_ /= length_;
 }
@@ -39,7 +40,7 @@ bool Segment::connects(const Segment &other) const {
 
 bool Segment::touches(const Segment &other) const {
     // First check if bounding boxes touch.
-    if (not Box(a_, b_).touches(Box(other.a_, other.b_))) {
+    if (not box_.touches(other.box_)) {
         return false;
     }
 
@@ -64,7 +65,7 @@ bool Segment::touches(const Segment &other) const {
 
 bool Segment::intersects(const Segment &other) const {
     // First check if bounding boxes touch.
-    if (not Box(a_, b_).touches(Box(other.a_, other.b_))) {
+    if (not box_.touches(other.box_)) {
         return false;
     }
 

@@ -36,6 +36,8 @@ public:
 
     double length_{0};
 
+    Box box_;
+
     // Performs a 2D cross product with the provided point (w.r.t. to a_) and b_ (w.r.t. to a_).
     double cross(const Point &point) const;
 
